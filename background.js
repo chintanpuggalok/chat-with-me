@@ -1,3 +1,5 @@
+//todo: add delay in file upload to reduce failures 
+//todo: find a way to get a better selector
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'processFile' && message.content) { // Validate message content
     console.info('Processing file content');
