@@ -1,0 +1,16 @@
+
+{
+  "manifest_version": 3,
+  "name": "Tweet Logger",
+  "version": "1.0",
+  "description": "Upload a file and log each tweet item.",
+  "permissions": [
+    "storage","downloads"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
