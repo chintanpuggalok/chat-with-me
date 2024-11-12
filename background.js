@@ -1,5 +1,5 @@
-//todo: add delay in file upload to reduce failures 
-//todo: find a way to get a better selector
+// Add delay in file upload to reduce failures
+// Find a way to get a better selector
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'processFile' && message.content) { // Validate message content
     console.info('Processing file content');
@@ -138,6 +138,27 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     };
 
     processFile().then(sendResponse).catch(error => sendResponse({ status: 'error', message: error.message }));
+    return true; // Keep the message channel open for sendResponse
+  } else if (message.action === 'sendMessage' && message.message) {
+    console.info('Sending chat message:', message.message);
+    // Logic to handle sending chat message to NotebookLM or other service
+    // For example, you could use fetch to send the message to an API
+    fetch('https://api.notebooklm.com/sendMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: message.message })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Message sent successfully:', data);
+      sendResponse({ status: 'success', data: data });
+    })
+    .catch(error => {
+      console.error('Error sending message:', error);
+      sendResponse({ status: 'error', message: error.message });
+    });
     return true; // Keep the message channel open for sendResponse
   }
 });
