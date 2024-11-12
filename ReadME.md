@@ -2,7 +2,8 @@
 
 ## Overview
 
-The Tweet Logger Chrome Extension allows users to upload a file containing tweets and log each tweet item. Additionally, users can chat with their tweets by uploading them to NotebookLM.
+The Tweet Logger Chrome Extension allows users to upload a file containing tweets and log each tweet item. Additionally, users can chat with their tweets by uploading them to NotebookLM. Here is the V1
+
 
 ## Features
 
