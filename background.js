@@ -32,27 +32,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         // Function to convert tweet data to markdown
         function tweetToMarkdown(tweet) {
-          const md = ["<START_TWEET>"];
+          const md = [];
           if (tweet.created_at) {
-            md.push(`**Created At:** ${tweet.created_at}`);
+            md.push(`*Created:* ${tweet.created_at}`);
           }
           if (tweet.full_text) {
             const cleanedText = removeUrls(tweet.full_text);
             if (cleanedText.split(' ').length < 10) {
               return null; // Exclude tweets with less than 10 words
             }
-            md.push(`**Full Text:** ${cleanedText}`);
+            md.push(cleanedText);
           }
           if (tweet.favorite_count) {
-            md.push(`**Favorite Count:** ${tweet.favorite_count}`);
+            md.push(`*Likes:* ${tweet.favorite_count}`);
           }
           if (tweet.in_reply_to_screen_name) {
-            md.push(`**In Reply To:** ${tweet.in_reply_to_screen_name}`);
+            md.push(`*Reply To:* ${tweet.in_reply_to_screen_name}`);
           }
           if (tweet.entities && tweet.entities.user_mentions) {
-            md.push(`**User Mentions:** ${tweet.entities.user_mentions.map(mention => mention.screen_name).join(', ')}`);
+            md.push(`*Mentions:* ${tweet.entities.user_mentions.map(mention => mention.screen_name).join(', ')}`);
           }
-          md.push("<END_TWEET>");
           return md.join('\n');
         }
 
@@ -79,6 +78,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           markdownContent.push(currentContent);
         }
 
+        console.log('Processed markdown content:', markdownContent);
+
         // Function to check if the content script is ready
         function checkContentScriptReady(tabId, callback) {
           chrome.tabs.sendMessage(tabId, { action: 'ping' }, (response) => {
@@ -88,6 +89,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
               setTimeout(() => checkContentScriptReady(tabId, callback), 1000);
             }
           });
+        }
+
+        // Function to upload files with delay and ensure no duplicates
+        async function uploadFilesWithDelay(tabId, content, delay) {
+          await new Promise((resolve, reject) => {
+            chrome.tabs.sendMessage(tabId, { action: 'insertContent', content: content.join('----') }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError.message);
+                reject(chrome.runtime.lastError.message);
+              } else {
+                console.log('File message sent successfully');
+                console.log('Response from content script:', response);
+                resolve(response);
+              }
+            });
+          });
+          await new Promise(resolve => setTimeout(resolve, delay));
         }
 
         // Wait for the content script to be ready before sending the message
@@ -100,18 +118,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           });
           console.log('Content script injected, waiting for content script to be ready');
           return new Promise((resolve, reject) => {
-            checkContentScriptReady(activeTab.id, () => {
+            checkContentScriptReady(activeTab.id, async () => {
               console.log('Content script is ready, sending insertContent message');
-              chrome.tabs.sendMessage(activeTab.id, { action: 'insertContent', content: markdownContent.join('----') }, (response) => {
-                if (chrome.runtime.lastError) {
-                  console.error(chrome.runtime.lastError.message);
-                  reject(chrome.runtime.lastError.message);
-                } else {
-                  console.log('Message sent successfully');
-                  console.log('Response from content script:', response);
-                  resolve(response);
-                }
-              });
+              try {
+                await uploadFilesWithDelay(activeTab.id, markdownContent, 100); // 100 ms delay
+                resolve({ status: 'success' });
+              } catch (error) {
+                reject(error);
+              }
             });
           });
         }
