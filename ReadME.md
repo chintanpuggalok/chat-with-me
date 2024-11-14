@@ -30,10 +30,14 @@ This Chrome extension allows you to upload your tweets to NotebookLM, enabling y
 
 ## Usage
 
-1. Click on the extension icon in the Chrome toolbar to open the popup.
-2. Click the "Upload" button to select a file containing your tweets.
-3. The extension will process the file, convert the tweets to markdown format, and upload them to NotebookLM.
-4. You can view the log of each tweet item in the console.
+1. Open [NotebookLM](https://notebooklm.google.com/) and create a notebook.
+2. Ensure that you are on the upload sources screen.
+   ![Upload Sources Screen](./upload_sources.png)
+3. Click on the extension icon in the Chrome toolbar to open the popup.
+4. Click the "Upload" button to select a file containing your tweets.
+5. Locate and select the `tweets.js` file.
+6. The extension will process the file, convert the tweets to markdown format, and upload them to NotebookLM.
+7. You can view the log of each tweet item in the console.
 
 ## File Structure
 

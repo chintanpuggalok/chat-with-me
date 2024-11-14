@@ -99,7 +99,7 @@ function dispatchCustomMouseEvent(targetElement) {
 }
 
 // Example usage
-let targetElement = document.querySelector('span.dropzone__file-dialog-button');
+targetElement = document.querySelector('span.dropzone__file-dialog-button');
 if (targetElement) {
   dispatchCustomMouseEvent(targetElement);
 }
