@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tweet Logger",
+  "name": "Upload Tweets to NotebookLM",
   "version": "1.0",
   "description": "Upload a file and log each tweet item. Chat with your tweets by uploading them to NotebookLM.",
   "permissions": [

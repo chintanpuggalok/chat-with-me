@@ -16,15 +16,4 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('No file selected');
     }
   });
-
-  document.getElementById('sendButton').addEventListener('click', () => {
-    const chatInputElement = document.getElementById('chatInput');
-    const chatMessage = chatInputElement.value;
-    if (chatMessage) {
-      chrome.runtime.sendMessage({ action: 'sendMessage', message: chatMessage });
-      chatInputElement.value = ''; // Clear the chat input
-    } else {
-      alert('No message entered');
-    }
-  });
 });
