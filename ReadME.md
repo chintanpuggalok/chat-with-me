@@ -10,6 +10,17 @@ This Chrome extension allows you to upload your tweets to NotebookLM, enabling y
 - Log each tweet item.
 - Chat with your tweets by sending messages to NotebookLM.
 
+## Release Notes
+
+### Version 0.1.0 - Testing Phase
+
+- Initial release with basic features.
+- Upload a file containing tweets.
+- Process and convert tweets to markdown format.
+- Upload tweets to NotebookLM.
+- Log each tweet item.
+- Chat with your tweets by sending messages to NotebookLM.
+
 ## Installation
 
 1. Clone the repository to your local machine.
