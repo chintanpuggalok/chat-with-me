@@ -16,4 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('No file selected');
     }
   });
+
+  document.getElementById('downloadButton').addEventListener('click', () => {
+    const fileInputElement = document.getElementById('fileInput');
+    const selectedFile = fileInputElement.files[0];
+    if (selectedFile) {
+      const fileReader = new FileReader();
+      fileReader.onload = function(event) {
+        const fileContent = event.target.result;
+        chrome.runtime.sendMessage({ action: 'downloadMarkdown', content: fileContent });
+      };
+      fileReader.readAsText(selectedFile);
+    } else {
+      alert('No file selected');
+    }
+  });
 });
